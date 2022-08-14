@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>TUBES TBA</title>
+	<link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+  <style>
+    .tab {
+            display: inline-block;
+            margin-left: 40px;
+    }
+    .font1 {
+      font-size: 20pt;
+      font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+    }
+    .font2 {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+    }
+  </style>
+</head>
+
+<body>
+	<center>====================================================================================================================</center>
+		<br> 
+    <div class="font1">
+    <center><b>CEK VALIDASI KALIMAT
+    </b></center>
+    <center><b>BAHASA MELAYU</b></center>
+    </div>
+    
+    <div class="font2">
+    <br>
+    <b>&nbsp &nbsp Halo! Selamat datang di program pengecekan validasi kalimat dalam BAHASA MELAYU!</b>
+    <br> 
+    &nbsp &nbsp Berikut adalah daftar kata yang dapat dicek pada lexical analyzer ini : 
+    <br> <br>
+    &nbsp &nbsp --------------------------------------------- <br>
+    &nbsp &nbsp | &nbsp SUBJECT &nbsp  | &nbsp &nbsp &nbsp VERB &nbsp &nbsp &nbsp | &nbsp &nbsp OBJECT &nbsp |<br>
+    &nbsp &nbsp |--------------------------------------------|<br>
+    &nbsp &nbsp | 1. ros &nbsp &nbsp &nbsp &nbsp | 1. lihat &nbsp &nbsp &nbsp &nbsp &nbsp | 1. limau &nbsp &nbsp &nbsp |<br>
+    &nbsp &nbsp | 2. opah &nbsp &nbsp | 2. melukis &nbsp &nbsp &nbsp | 2. ayam &nbsp &nbsp &nbsp |<br>
+    &nbsp &nbsp |&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp | 3. membasuh | 3. basikal &nbsp &nbsp |<br>
+    &nbsp &nbsp |&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp |&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp| 4. kasut &nbsp &nbsp &nbsp &nbsp |<br>
+    &nbsp &nbsp --------------------------------------------- <br> <br>
+
+  <center>====================================================================================================================</center>
+  </div>
+	
+	<py-script>
+import string
+
+sentence = input(' ')
+inputString = sentence.lower()+'#'
+
+alphabetList = list(string.ascii_lowercase)
+stateList = ['q0','q1','q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8', 'q9', 'q10', 
+             'q11', 'q12', 'q13', 'q14', 'q15', 'q16','q17', 'q18', 'q19', 'q20',
+             'q21', 'q22', 'q23', 'q24', 'q25', 'q26', 'q27', 'q28', 'q29', 'q30', 
+             'q31', 'q32', 'q33', 'q34', 'q35', 'q36', 'q37', 'q38', 'q40', 'q41']
+
+        
+transition_table = {}
+
+for state in stateList:
+    for alphabet in alphabetList:
+        transition_table[(state, alphabet)] = 'error'
+    transition_table[(state, '#')] = 'error'
+    transition_table[(state, ' ')] = 'error'
+
+#start
+transition_table['q0', ' '] = 'q0'
+
+#finish 
+transition_table[('q4', '#')]= 'accept'
+transition_table[('q4', ' ')]= 'q41'
+
+transition_table[('q41', '#')]= 'accept'
+transition_table[('q41', ' ')]= 'q41'
+
+#=================================== SUBJECT ===================================
+
+
+#untuk ros 
+transition_table[('q0', 'r')]= 'q5'
+transition_table[('q5', 'o')]= 'q6'
+transition_table[('q6', 's')]= 'q4'
+transition_table[('q4', ' ')]= 'q41'
+transition_table[('q41', 'r')] = 'q5'
+
+#untuk opah
+transition_table[('q0', 'o')]= 'q7'
+transition_table[('q7', 'p')]= 'q8'
+transition_table[('q8', 'a')]= 'q9'
+transition_table[('q9', 'h')]= 'q4'
+transition_table[('q4', ' ')]= 'q41'
+transition_table[('q41', 'o')] = 'q7'
+
+#==================================== VERB =====================================
+
+#untuk lihat
+transition_table[('q0', 'l')]= 'q15'
+transition_table[('q15', 'i')]= 'q16'
+transition_table[('q16', 'h')]= 'q17'
+transition_table[('q17', 'a')]= 'q18'
+transition_table[('q18', 't')]= 'q4'
+transition_table[('q4', ' ')]= 'q41'
+transition_table[('q41', 'l')] = 'q15'
+
+#untuk melukis
+transition_table[('q0', 'm')]= 'q19'
+transition_table[('q19', 'e')]= 'q20'
+transition_table[('q20', 'l')]= 'q21'
+transition_table[('q21', 'u')]= 'q22'
+transition_table[('q22', 'k')]= 'q23'
+transition_table[('q23', 'i')]= 'q24'
+transition_table[('q24', 's')]= 'q4'
+transition_table[('q4', ' ')]= 'q41'
+transition_table[('q41', 'm')] = 'q19'
+
+#untuk membasuh
+transition_table[('q20', 'm')]= 'q25'
+transition_table[('q25', 'b')]= 'q26'
+transition_table[('q26', 'a')]= 'q27'
+transition_table[('q27', 's')]= 'q28'
+transition_table[('q28', 'u')]= 'q29'
+transition_table[('q29', 'h')]= 'q4'
+transition_table[('q4', ' ')]= 'q41'
+transition_table[('q41', 'm')] = 'q19'
+
+#=================================== OBJECT ====================================
+
+#untuk limau
+transition_table[('q16', 'm')]= 'q13'
+transition_table[('q13', 'a')]= 'q14'
+transition_table[('q14', 'u')]= 'q4'
+transition_table[('q41', 'l')] = 'q15'
+
+#untuk ayam
+transition_table[('q0', 'a')]= 'q30'
+transition_table[('q30', 'y')]= 'q31'
+transition_table[('q31', 'a')]= 'q32'
+transition_table[('q32', 'm')]= 'q4'
+
+#untuk basikal
+transition_table[('q0', 'b')]= 'q33'
+transition_table[('q33', 'a')]= 'q34'
+transition_table[('q34', 's')]= 'q35'
+transition_table[('q35', 'i')]= 'q36'
+transition_table[('q36', 'k')]= 'q37'
+transition_table[('q37', 'a')]= 'q38'
+transition_table[('q38', 'l')]= 'q4'
+
+#untuk kasut
+transition_table[('q0', 'k')]= 'q37'
+transition_table[('q37', 'a')]= 'q38'
+transition_table[('q38', 's')]= 'q39'
+transition_table[('q39', 'u')]= 'q40'
+transition_table[('q40', 't')]= 'q4'
+
+#===============================================================================
+
+#new token
+transition_table [('q41', 'u')] = 'q1'
+transition_table [('q41', 'i')] = 'q1'
+transition_table [('q41', 'r')] = 'q5'
+transition_table [('q41', 'o')] = 'q7'
+
+
+transition_table [('q41', 'k')] = 'q10'
+transition_table [('q41', 'l')] = 'q15'
+transition_table [('q41', 'm')] = 'q19'
+
+transition_table [('q41', 'a')] = 'q30'
+transition_table [('q41', 'b')] = 'q33'
+transition_table [('q41', 'k')] = 'q37'
+
+idxChar = 0
+currenToken = ' '
+state = 'q0'
+while state != 'accept':
+    currenChar = inputString[idxChar]
+    currenToken += currenChar
+    state = transition_table[(state, currenChar)]
+    if state == 'q4':
+        print('&nbsp &nbsp Current token &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : %s ==> VALID' % currenToken)
+        currenToken = ' ' 
+    if state == 'error':
+        print('&nbsp &nbsp Input tidak valid!')
+        print('&nbsp &nbsp Current token &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : %s ==> ERROR' % currenToken)
+        break
+    idxChar += 1
+if state == 'accept':
+    print('&nbsp &nbsp Semua token di input &nbsp : %s ==> VALID' % sentence)
+
+#===============================================================================
+
+#PARSER GRAMMAR CHEKER
+#input example
+#x = input()
+#x = str(x)
+#sentence = x
+print('====================================================================================================================')
+print('&nbsp &nbsp Pengecek validasi kalimat dengan analyzer lexical telah selesai!')
+print('&nbsp &nbsp Selanjutnya akan dilakukan pengecekan grammar')
+print('====================================================================================================================')
+tokens = sentence.lower().split()
+tokens.append('EOS')
+
+#symbols definition
+non_terminals = ['S', 'SB', 'VB', 'OB']
+terminals = ['upin', 'ipin', 'ros', 'opah', 'kira', 'lihat', 'melukis', 'membasuh', 'limau', 'ayam', 'basikal', 'kasut']
+
+#parse table definition
+parse_table = {}
+
+parse_table[('S', 'upin')] = ['SB', 'VB', 'OB']
+parse_table[('S', 'ipin')] = ['SB', 'VB', 'OB']
+parse_table[('S', 'ros')] = ['SB', 'VB', 'OB']
+parse_table[('S', 'opah')] = ['SB', 'VB', 'OB']
+parse_table[('S', 'kira')] = ['error']
+parse_table[('S', 'lihat')] = ['error']
+parse_table[('S', 'melukis')] = ['error']
+parse_table[('S', 'membasuh')] = ['error']
+parse_table[('S', 'limau')] = ['error']
+parse_table[('S', 'ayam')] = ['error']
+parse_table[('S', 'basikal')] = ['error']
+parse_table[('S', 'kasut')] = ['error']
+parse_table[('S', 'EOS')] = ['error']
+
+parse_table[('SB', 'upin')] = ['upin']
+parse_table[('SB', 'ipin')] = ['ipin']
+parse_table[('SB', 'ros')] = ['ros']
+parse_table[('SB', 'opah')] = ['opah']
+parse_table[('SB', 'kira')] = ['error']
+parse_table[('SB', 'lihat')] = ['error']
+parse_table[('SB', 'melukis')] = ['error']
+parse_table[('SB', 'membasuh')] = ['error']
+parse_table[('SB', 'limau')] = ['error']
+parse_table[('SB', 'ayam')] = ['error']
+parse_table[('SB', 'basikal')] = ['error']
+parse_table[('SB', 'kasut')] = ['error']
+parse_table[('SB', 'EOS')] = ['error']
+
+parse_table[('VB', 'upin')] = ['error']
+parse_table[('VB', 'ipin')] = ['error']
+parse_table[('VB', 'ros')] = ['error']
+parse_table[('VB', 'opah')] = ['error']
+parse_table[('VB', 'kira')] = ['kira']
+parse_table[('VB', 'lihat')] = ['lihat']
+parse_table[('VB', 'melukis')] = ['melukis']
+parse_table[('VB', 'membasuh')] = ['membasuh']
+parse_table[('VB', 'limau')] = ['error']
+parse_table[('VB', 'ayam')] = ['error']
+parse_table[('VB', 'basikal')] = ['error']
+parse_table[('VB', 'kasut')] = ['error']
+parse_table[('VB', 'EOS')] = ['error']
+
+parse_table[('OB', 'upin')] = ['error']
+parse_table[('OB', 'ipin')] = ['error']
+parse_table[('OB', 'ros')] = ['error']
+parse_table[('OB', 'opah')] = ['error']
+parse_table[('OB', 'kira')] = ['error']
+parse_table[('OB', 'lihat')] = ['error']
+parse_table[('OB', 'melukis')] = ['error']
+parse_table[('OB', 'membasuh')] = ['error']
+parse_table[('OB', 'limau')] = ['limau']
+parse_table[('OB', 'ayam')] = ['ayam']
+parse_table[('OB', 'basikal')] = ['basikal']
+parse_table[('OB', 'kasut')] = ['kasut']
+parse_table[('OB', 'EOS')] = ['error']
+
+#stack initialization
+stack = []
+stack.append('#')
+stack.append('S')
+
+#input reading initialization
+idx_token = 0
+symbol = tokens[idx_token]
+
+#parsing process
+try :
+  while (len(stack) > 0):
+    top = stack[len(stack)-1]
+    print('&nbsp &nbsp top = %s' % top)
+    print('&nbsp &nbsp symbol = %s' % symbol)
+    if top in terminals:
+      print('&nbsp &nbsp top adalah simbol terminal')
+      if top==symbol:
+        stack.pop()
+        idx_token = idx_token + 1
+        symbol = tokens[idx_token]
+        if symbol == 'EOS':
+          print('&nbsp &nbsp isi stack : %s' % stack)
+          stack.pop()
+      else:
+        print('error')
+        break;
+    elif top in non_terminals:
+      print('&nbsp &nbsp top adalah simbol non-terminal')
+      if parse_table[(top, symbol)][0] != 'error':
+        stack.pop()
+        symbols_to_be_pushed = parse_table[(top, symbol)]
+        for i in range(len(symbols_to_be_pushed)-1,-1,-1):
+          stack.append(symbols_to_be_pushed[i])
+      else:
+        print('&nbsp &nbsp error')
+        break;
+    else:
+      print('&nbsp &nbsp error')
+      break;
+    print('&nbsp &nbsp isi stack : %s' % stack)
+    if len(stack)>0:
+      print('---------------------------------------')
+except KeyError :
+    print('&nbsp &nbsp Kata tidak ditemukan dalam sistem.')
+
+#conclusion
+print()
+if symbol == 'EOS' and len(stack) == 0:
+  print('====================================================================================================================')
+  print('&nbsp &nbsp Input kalimat : %s' % sentence)
+  print('&nbsp &nbsp Kalimat yang Anda masukan sesuai grammar!')
+  print('====================================================================================================================')
+else :
+  print('====================================================================================================================')
+  print('&nbsp &nbsp Error, input kalimat : %s' % sentence)
+  print('&nbsp &nbsp Kalimat yang Anda masukan TIDAK sesuai grammar')
+  print('&nbsp &nbsp atau terdapat kata yang tidak valid.')
+  print('&nbsp &nbsp Silahkan cek kembali kalimat yang Anda masukan!')
+  print('====================================================================================================================')
+	<py-script>
+	
+</body>
+</html>
